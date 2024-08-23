@@ -30,4 +30,4 @@ const Initializer = ({ children }: Props) => {
   return <GestureHandlerRootView className="flex-1">{children}</GestureHandlerRootView>;
 };
 
-export default Initializer;
+export default Initializer
