@@ -1,21 +1,14 @@
-import { Redirect, Stack } from 'expo-router';
+import { Slot } from 'expo-router';
 
 export const unstable_settings = {
   initialRouteName: '(tabs)',
 };
 
 const AppLayout = () => {
-  const isAuth = true;
-
-  if (!isAuth) {
-    return <Redirect href="/auth" />;
-  }
-
-  return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
-  );
+  // <Stack>
+  //   <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+  // </Stack>
+  return <Slot />;
 };
 
 export default AppLayout;
