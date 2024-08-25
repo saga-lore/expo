@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Image as RNImage, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ScrollView } from 'react-native-gesture-handler';
+import { FlashList } from '@shopify/flash-list';
 import soloLeveling from 'data/kunmanga/solo-leveling.json';
-import weaponMaker from 'data/kunmanga/weapon-maker.json';
 import { viewportHeight, viewportWidth } from 'utils/viewport';
 
 const blurhash =
@@ -18,6 +18,7 @@ const MangaImage = ({ source }: MangaImageProps) => {
   const [height, setHeight] = useState(viewportHeight);
 
   useEffect(() => {
+    if (!source) return;
     RNImage.getSize(
       source,
       (width, height) => {
@@ -26,7 +27,9 @@ const MangaImage = ({ source }: MangaImageProps) => {
       },
       console.error,
     );
-  }, []);
+  });
+
+  if (!source) return null;
 
   const aspectRatio = width / height;
   const imageHeight = viewportWidth / aspectRatio;
@@ -57,17 +60,39 @@ const MangaImage = ({ source }: MangaImageProps) => {
 };
 const Manga = ({ chapters }: MangaProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [allImages, setAllImages] = useState(chapters[0].images);
+  const [heights, setHeights] = useState<{ [key: number]: number }>({});
+  const [prevImage, setPrevImage] = useState('');
+  const [nextImage, setNextImage] = useState('');
+
+  useEffect(() => {
+    const images = [];
+    for (let i = 0; i < chapters.length; i++) images.push(...chapters[i].images);
+    setAllImages(images);
+  }, [setAllImages, chapters]);
+
   const handleScroll = (event: any) => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    const index = Math.floor(offsetY / viewportHeight);
-    setCurrentIndex(index);
-    console.log(index, offsetY);
+    if (!heights[currentIndex]) {
+      RNImage.getSize(allImages[currentIndex], (w, h) => setHeights({ ...heights, [currentIndex]: h }), console.error);
+    }
+    const yOffSet = event.nativeEvent.contentOffset.y;
+    console.log(yOffSet, heights);
+    if (yOffSet + viewportHeight > heights[currentIndex]) {
+      setNextImage(allImages[currentIndex + 1]);
+    }
+    if (yOffSet - viewportHeight < heights[currentIndex]) {
+      setPrevImage(allImages[currentIndex - 1]);
+    }
+    if (yOffSet > heights[currentIndex] * 1.2) {
+      setCurrentIndex(currentIndex + 1);
+    }
   };
+  const time = Date.now();
   return (
     <ScrollView className="bg-black" onScroll={handleScroll}>
-      {chapters.map((chapter) => {
-        return chapter.images.map((image) => <MangaImage key={image} source={image} />);
-      })}
+      {<MangaImage source={prevImage} />}
+      {<MangaImage source={allImages[currentIndex]} />}
+      {<MangaImage source={nextImage} />}
     </ScrollView>
   );
 };
