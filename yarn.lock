@@ -7993,6 +7993,11 @@ react-native-helmet-async@2.0.4:
     react-fast-compare "^3.2.2"
     shallowequal "^1.1.0"
 
+react-native-image-viewing@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-image-viewing/-/react-native-image-viewing-0.2.2.tgz#fb26e57d7d3d9ce4559a3af3d244387c0367242b"
+  integrity sha512-osWieG+p/d2NPbAyonOMubttajtYEYiRGQaJA54slFxZ69j1V4/dCmcrVQry47ktVKy8/qpFwCpW1eT6MH5T2Q==
+
 react-native-reanimated@~3.10.1:
   version "3.10.1"
   resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.10.1.tgz"

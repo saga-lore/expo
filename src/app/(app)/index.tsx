@@ -1,59 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { Dimensions, Image, StyleSheet, View } from 'react-native';
-import weaponMaker from 'data/kunmanga/weapon-maker.json';
+import { StyleSheet, View } from 'react-native';
+import { Image } from 'expo-image';
+import { ScrollView } from 'react-native-gesture-handler';
+import { viewportHeight, viewportWidth } from 'utils/viewport';
 
-const { width: screenWidth } = Dimensions.get('window');
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-const App = () => {
-  const [imageWidth, setImageWidth] = useState(screenWidth);
-  const [imageHeight, setImageHeight] = useState(0);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
-
-  const imageUri = weaponMaker.chapters[0].images[0]; // Replace with your high-res image URI
-
-  useEffect(() => {
-    Image.getSize(
-      imageUri,
-      (width, height) => {
-        setImageWidth(width);
-        setImageHeight(height);
-        setIsImageLoaded(true);
-      },
-      (error) => {
-        console.error('Failed to get image size:', error);
-      },
-    );
-  }, [imageUri]);
-
-  // Calculate height based on the aspect ratio
-  const aspectRatio = imageWidth / imageHeight;
-  const calculatedHeight = screenWidth / aspectRatio;
-
+export default function App() {
   return (
-    <View style={[styles.container, { width: imageWidth }]}>
-      {isImageLoaded && (
+    <ScrollView style={{ flex: 1, backgroundColor: 'red' }}>
+      <View style={styles.container}>
         <Image
-          source={{ uri: imageUri }}
-          style={[styles.image, { width: imageWidth, height: calculatedHeight }]}
-          resizeMode="contain" // Try "contain" or "cover" based on your needs
+          style={styles.image}
+          source="https://img-4.harimanga.com/weapon-maker/chapter-34/001.webp"
+          placeholder={{ blurhash }}
+          contentFit="cover"
+          transition={1000}
         />
-      )}
-    </View>
+      </View>
+    </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    backgroundColor: 'black', // Optional: use a background color to contrast image
+    width: viewportWidth,
+    height: viewportHeight,
+    backgroundColor: 'blue',
   },
   image: {
-    // Ensure image dimensions are set correctly
+    flex: 1,
     width: '100%',
-    height: 'auto',
+    backgroundColor: '#0553',
   },
 });
-
-export default App;
